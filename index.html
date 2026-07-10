@@ -1043,7 +1043,7 @@
             </ul>
           </div>
 
-          <form method="POST" action="https://formspree.io/f/mwvdqbav">
+          <form method="POST" action="https://script.google.com/macros/s/AKfycbzQeGjzKuBAZxWS-bEKtFS8nXUH0oXm3NIe_C9WhWODuRpUxV0EgavDFmH-ADibqHCImg/exec">
             <div class="field">
               <label for="f-name">Name (Ansprechpartner)</label>
               <input type="text" id="f-name" name="name" placeholder="Vor- und Nachname" autocomplete="name" required>
@@ -1082,7 +1082,6 @@
               </label>
             </div>
 
-            <input type="hidden" name="_subject" value="Anmeldung Tisch 7 Mitternachtsturnier 2026">
             <button class="button button-primary" type="submit">Verbindlich anmelden</button>
             <p class="form-hint">Rückfragen? Schreib uns an <a href="mailto:tisch7@driveyou.de">tisch7@driveyou.de</a>.</p>
           </form>
@@ -1098,15 +1097,16 @@
 
   <script>
     // =====================================================================
-    // PLÄTZE-TICKER – HIER PFLEGEN:
-    // Nach jeder eingegangenen Anmeldung (Formspree-Mail) die Zahl der
-    // bereits angemeldeten Spieler hier eintragen und die Datei neu
-    // hochladen. Mehr ist nicht zu tun.
+    // PLÄTZE-ZÄHLER – zählt jetzt automatisch aus der Google-Tabelle.
+    // ANGEMELDETE_SPIELER dient nur noch als Fallback-Wert, falls die
+    // Live-Abfrage mal nicht erreichbar ist (z. B. kurzer Ausfall).
+    // Nichts händisch pflegen nötig.
     // =====================================================================
     var PLAETZE_GESAMT = 24;
-    var ANGEMELDETE_SPIELER = 0;   // <-- diese Zahl aktualisieren
+    var ANGEMELDETE_SPIELER = 0;   // Fallback, falls Live-Abfrage fehlschlägt
+    var APPS_SCRIPT_URL = "https://script.google.com/macros/s/AKfycbzQeGjzKuBAZxWS-bEKtFS8nXUH0oXm3NIe_C9WhWODuRpUxV0EgavDFmH-ADibqHCImg/exec";
 
-    (function () {
+    function renderPlaetze() {
       var frei = Math.max(0, PLAETZE_GESAMT - ANGEMELDETE_SPIELER);
       var num = document.getElementById("ticker-num");
       var label = document.getElementById("ticker-label");
@@ -1122,7 +1122,21 @@
         html += '<span class="ball' + (i < ANGEMELDETE_SPIELER ? ' taken' : '') + '"></span>';
       }
       grid.innerHTML = html;
-    })();
+    }
+
+    renderPlaetze(); // sofort mit Fallback-Wert anzeigen, kein Warten auf das Netz
+
+    fetch(APPS_SCRIPT_URL)
+      .then(function (r) { return r.json(); })
+      .then(function (data) {
+        if (typeof data.angemeldet === "number") {
+          ANGEMELDETE_SPIELER = data.angemeldet;
+          renderPlaetze();
+        }
+      })
+      .catch(function () {
+        // Live-Abfrage fehlgeschlagen (z. B. offline) – Fallback-Wert bleibt sichtbar
+      });
 
     // Dynamische Spieler-Felder: pro Spieler Name + TTR-Wert
     (function () {
