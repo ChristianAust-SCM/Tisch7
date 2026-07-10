@@ -740,6 +740,101 @@
 
     .form-hint { margin: 0; color: var(--muted-2); font-size: 0.93rem; }
 
+    /* Datenschutz */
+    .privacy-block {
+      display: grid;
+      gap: 12px;
+      margin-top: 4px;
+      padding-top: 6px;
+      border-top: 1px solid var(--line);
+    }
+
+    .privacy-block > p {
+      margin: 0;
+      color: var(--muted-2);
+      font-size: 0.88rem;
+      line-height: 1.55;
+    }
+
+    .privacy-details summary {
+      cursor: pointer;
+      color: var(--muted);
+      font-size: 0.88rem;
+      font-weight: 700;
+      list-style: none;
+    }
+
+    .privacy-details summary::-webkit-details-marker { display: none; }
+
+    .privacy-details summary::before {
+      content: "Datenschutzhinweis lesen  \25BE";
+    }
+
+    .privacy-details[open] summary::before {
+      content: "Datenschutzhinweis ausblenden  \25B4";
+    }
+
+    .privacy-details summary:hover,
+    .privacy-details summary:focus-visible {
+      color: var(--gold-bright);
+    }
+
+    .privacy-full {
+      margin-top: 10px;
+      padding: 14px 16px;
+      border: 1px solid var(--line);
+      border-radius: 12px;
+      background: rgba(5, 10, 18, 0.5);
+      color: var(--muted-2);
+      font-size: 0.85rem;
+      line-height: 1.6;
+    }
+
+    .privacy-full p { margin: 0 0 10px; }
+    .privacy-full p:last-child { margin-bottom: 0; }
+    .privacy-full strong { color: var(--muted); }
+
+    .privacy-check {
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+      cursor: pointer;
+    }
+
+    .privacy-check input[type="checkbox"] {
+      appearance: none;
+      -webkit-appearance: none;
+      flex: 0 0 auto;
+      width: 20px;
+      height: 20px;
+      margin-top: 2px;
+      border: 1px solid var(--line-strong);
+      border-radius: 5px;
+      background: rgba(5, 10, 18, 0.72);
+      cursor: pointer;
+      transition: border-color 160ms ease, background 160ms ease;
+    }
+
+    .privacy-check input[type="checkbox"]:checked {
+      border-color: var(--gold);
+      background:
+        linear-gradient(180deg, var(--gold-bright), var(--gold))
+          content-box;
+      background-image:
+        linear-gradient(180deg, var(--gold-bright), var(--gold));
+    }
+
+    .privacy-check input[type="checkbox"]:focus-visible {
+      outline: 3px solid rgba(246, 168, 33, 0.6);
+      outline-offset: 2px;
+    }
+
+    .privacy-check span {
+      color: var(--muted);
+      font-size: 0.92rem;
+      line-height: 1.5;
+    }
+
     .form-hint a { color: var(--muted); }
 
     /* Footer */
@@ -967,6 +1062,25 @@
             </div>
 
             <div id="spieler-liste" class="spieler-liste" aria-live="polite"></div>
+
+            <div class="privacy-block">
+              <p>Wir nutzen deine Angaben nur zur Organisation und Durchführung des Tisch&nbsp;7 Mitternachtsturniers. Eine Weitergabe zu Werbezwecken findet nicht statt. Nach Abschluss des Turniers werden nicht mehr benötigte Daten gelöscht.</p>
+
+              <details class="privacy-details">
+                <summary>Datenschutzhinweis</summary>
+                <div class="privacy-full">
+                  <p>Wir verarbeiten deine Angaben ausschließlich zur Organisation und Durchführung des Tisch&nbsp;7 Mitternachtsturniers. Dazu gehören insbesondere die Anmeldung, die Kommunikation rund um das Turnier, die Team- und Spielplanung sowie die Erstellung von Teilnehmer- und Ergebnislisten.</p>
+                  <p>Verarbeitet werden nur die Daten, die du im Rahmen der Anmeldung angibst, z.&nbsp;B. Name, Verein/Team, Kontaktangaben und turnierbezogene Angaben. Eine Weitergabe zu Werbezwecken findet nicht statt.</p>
+                  <p>Verantwortlich ist der <strong>FC Strass e.&nbsp;V.</strong> Die Daten werden nur so lange gespeichert, wie sie für die Durchführung und Nachbereitung des Turniers erforderlich sind oder gesetzliche bzw. vereinsinterne Dokumentationspflichten bestehen.</p>
+                  <p>Du hast im Rahmen der gesetzlichen Vorgaben das Recht auf Auskunft, Berichtigung und Löschung deiner personenbezogenen Daten. Bei Fragen zur Datenverarbeitung kannst du dich an die Turnierleitung wenden: <a href="mailto:tisch7@driveyou.de">tisch7@driveyou.de</a>.</p>
+                </div>
+              </details>
+
+              <label class="privacy-check">
+                <input type="checkbox" id="f-privacy" name="datenschutz_zustimmung" value="ja" required>
+                <span>Ich habe den Datenschutzhinweis gelesen und bin damit einverstanden, dass meine Angaben zur Organisation und Durchführung des Tisch&nbsp;7 Mitternachtsturniers verarbeitet werden.</span>
+              </label>
+            </div>
 
             <input type="hidden" name="_subject" value="Anmeldung Tisch 7 Mitternachtsturnier 2026">
             <button class="button button-primary" type="submit">Verbindlich anmelden</button>
