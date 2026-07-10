@@ -646,6 +646,17 @@
 
     .signup-intro h2 { max-width: 10ch; }
 
+    .waitlist-note {
+      margin: 16px 0 0;
+      padding: 14px 16px;
+      border: 1px solid rgba(53, 217, 164, 0.4);
+      border-radius: 12px;
+      background: rgba(29, 158, 117, 0.12);
+      color: #dcfff2;
+      font-size: 0.95rem;
+      line-height: 1.55;
+    }
+
     .signup-points {
       margin: 22px 0 0;
       padding: 0;
@@ -1035,9 +1046,10 @@
       <section class="section" id="anmeldung" aria-labelledby="anmeldung-title">
         <div class="signup">
           <div class="signup-intro">
-            <p class="kicker">Anmeldung</p>
+            <p class="kicker" id="anmeldung-kicker">Anmeldung</p>
             <h2 id="anmeldung-title">Sichere dir deinen Platz am Tisch</h2>
-            <ul class="signup-points">
+            <p class="waitlist-note" id="waitlist-note" hidden>Das Teilnehmerfeld ist voll. Du kannst dich unten auf die Warteliste eintragen – wird ein Platz frei, melden wir uns bei dir.</p>
+            <ul class="signup-points" id="signup-points">
               <li>Anmeldung ausschließlich über dieses Formular – kurz ausfüllen, abschicken, fertig.</li>
               <li>Nur 24 Plätze: Die Anmeldung gilt in der Reihenfolge des Eingangs.</li>
               <li>Pro Spieler bitte Name und aktuellen TTR-Wert angeben – der fließt in die Turnierplanung ein.</li>
@@ -1084,7 +1096,7 @@
               </label>
             </div>
 
-            <button class="button button-primary" type="submit">Verbindlich anmelden</button>
+            <button class="button button-primary" type="submit" id="submit-btn">Verbindlich anmelden</button>
             <p class="form-hint">Rückfragen? Schreib uns an <a href="mailto:tisch7@driveyou.de">tisch7@driveyou.de</a>.</p>
           </form>
         </div>
@@ -1124,6 +1136,29 @@
         html += '<span class="ball' + (i < ANGEMELDETE_SPIELER ? ' taken' : '') + '"></span>';
       }
       grid.innerHTML = html;
+
+      // Formular auf Warteliste umschalten, sobald alle Plätze belegt sind
+      var kicker = document.getElementById("anmeldung-kicker");
+      var title = document.getElementById("anmeldung-title");
+      var note = document.getElementById("waitlist-note");
+      var points = document.getElementById("signup-points");
+      var btn = document.getElementById("submit-btn");
+
+      if (frei === 0) {
+        kicker.textContent = "Warteliste";
+        title.textContent = "Trag dich auf die Warteliste ein";
+        note.hidden = false;
+        points.children[0].textContent = "Eintragung ausschließlich über dieses Formular – kurz ausfüllen, abschicken, fertig.";
+        points.children[1].textContent = "Alle 24 Plätze sind vergeben. Bei Absagen rücken Wartelisten-Anmeldungen in Reihenfolge des Eingangs nach.";
+        btn.textContent = "Auf Warteliste eintragen";
+      } else {
+        kicker.textContent = "Anmeldung";
+        title.textContent = "Sichere dir deinen Platz am Tisch";
+        note.hidden = true;
+        points.children[0].textContent = "Anmeldung ausschließlich über dieses Formular – kurz ausfüllen, abschicken, fertig.";
+        points.children[1].textContent = "Nur 24 Plätze: Die Anmeldung gilt in der Reihenfolge des Eingangs.";
+        btn.textContent = "Verbindlich anmelden";
+      }
     }
 
     renderPlaetze(); // sofort mit Fallback-Wert anzeigen, kein Warten auf das Netz
