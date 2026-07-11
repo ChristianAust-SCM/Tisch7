@@ -1096,6 +1096,8 @@
               </label>
             </div>
 
+            <input type="hidden" id="f-anmeldung-id" name="anmeldung_id" value="">
+
             <button class="button button-primary" type="submit" id="submit-btn">Verbindlich anmelden</button>
             <p class="form-hint">Rückfragen? Schreib uns an <a href="mailto:tisch7@driveyou.de">tisch7@driveyou.de</a>.</p>
           </form>
@@ -1213,6 +1215,31 @@
 
       anzahl.addEventListener("input", render);
       render();
+    })();
+
+    // =====================================================================
+    // DOPPEL-SUBMIT-SCHUTZ
+    // 1) Jede Anmeldung bekommt eine einmalige ID. Das Apps Script prüft
+    //    diese ID und ignoriert Wiederholungen (z. B. Reload der Danke-
+    //    Seite) – keine doppelte Zeile, keine zweite Bestätigungsmail.
+    // 2) Der Absenden-Button wird beim Abschicken gesperrt, damit
+    //    Doppelklicks während der Wartezeit nichts auslösen.
+    // =====================================================================
+    (function () {
+      var form = document.querySelector("form");
+      var idFeld = document.getElementById("f-anmeldung-id");
+      var btn = document.getElementById("submit-btn");
+
+      function neueId() {
+        if (window.crypto && crypto.randomUUID) return crypto.randomUUID();
+        return "id-" + Date.now() + "-" + Math.random().toString(36).slice(2, 10);
+      }
+      idFeld.value = neueId();
+
+      form.addEventListener("submit", function () {
+        btn.disabled = true;
+        btn.textContent = "Wird gesendet …";
+      });
     })();
   </script>
 
